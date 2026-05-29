@@ -23,7 +23,7 @@ export function useProjects(): UseProjectsReturn {
 
   const fetchProjects = useCallback(async () => {
     const { data, error } = await supabase
-      .from('projects')
+      .from('kdn20_projects')
       .select('*')
       .order('created_at', { ascending: true });
     if (error) console.error('프로젝트 로드 오류:', error.message);
@@ -35,7 +35,7 @@ export function useProjects(): UseProjectsReturn {
   /* 프로젝트 추가 */
   const addProject = async (name: string, color: string): Promise<Project | null> => {
     const { data, error } = await supabase
-      .from('projects')
+      .from('kdn20_projects')
       .insert([{ name, color }])
       .select()
       .single();
@@ -49,7 +49,7 @@ export function useProjects(): UseProjectsReturn {
   const deleteProject = async (id: string) => {
     const prev = projects;
     setProjects(cur => cur.filter(p => p.id !== id));
-    const { error } = await supabase.from('projects').delete().eq('id', id);
+    const { error } = await supabase.from('kdn20_projects').delete().eq('id', id);
     if (error) { setProjects(prev); console.error(error.message); }
   };
 

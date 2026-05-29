@@ -38,7 +38,7 @@ export function useTodos(): UseTodosReturn {
     setLoading(true);
     setError(null);
     const { data, error: err } = await supabase
-      .from('todos')
+      .from('kdn20_todos')
       .select('*')
       .order('sort_order', { ascending: true, nullsFirst: false })
       .order('created_at',  { ascending: true });
@@ -52,7 +52,7 @@ export function useTodos(): UseTodosReturn {
   /* ── 할 일 추가 ── */
   const addTodo = async (input: AddTodoInput): Promise<void> => {
     const { data, error: err } = await supabase
-      .from('todos')
+      .from('kdn20_todos')
       .insert([{
         title:       input.title,
         description: input.description || null,
@@ -84,7 +84,7 @@ export function useTodos(): UseTodosReturn {
       )
     );
     const { error: err } = await supabase
-      .from('todos')
+      .from('kdn20_todos')
       .update({
         title:       changes.title,
         description: changes.description ?? null,
@@ -111,7 +111,7 @@ export function useTodos(): UseTodosReturn {
       )
     );
     const { error: err } = await supabase
-      .from('todos').update({ completed, completed_at }).eq('id', id);
+      .from('kdn20_todos').update({ completed, completed_at }).eq('id', id);
     if (err) {
       setTodos(prev =>
         prev.map(t =>
@@ -128,7 +128,7 @@ export function useTodos(): UseTodosReturn {
   const deleteTodo = async (id: string): Promise<void> => {
     const snapshot = todos;
     setTodos(cur => cur.filter(t => t.id !== id));
-    const { error: err } = await supabase.from('todos').delete().eq('id', id);
+    const { error: err } = await supabase.from('kdn20_todos').delete().eq('id', id);
     if (err) { setTodos(snapshot); setError(err.message); }
   };
 
@@ -157,7 +157,7 @@ export function useTodos(): UseTodosReturn {
     // Supabase 일괄 업데이트
     await Promise.all(
       orderedIds.map((id, sort_order) =>
-        supabase.from('todos').update({ sort_order }).eq('id', id)
+        supabase.from('kdn20_todos').update({ sort_order }).eq('id', id)
       )
     );
   };
